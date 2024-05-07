@@ -21,3 +21,10 @@ model User {
 
   @@map("users")
 }
+
+model Category {
+  id            String @id @db.VarChar(100)
+  name_category String @db.VarChar(100)
+
+  @@map("categories")
+}
