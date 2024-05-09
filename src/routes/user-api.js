@@ -2,6 +2,7 @@ import express from "express";
 import userController from "../controller/user-controller.js";
 import categoryCotroller from "../controller/category-controller.js";
 import { authMiddleware } from "../middleware/auth-middleware.js";
+import itemController from "../controller/item-controller.js";
 
 export const userRouter = new express.Router();
 userRouter.use(authMiddleware);
@@ -14,3 +15,6 @@ userRouter.delete("/api/users/logout", userController.logout);
 // category
 userRouter.post("/api/category", categoryCotroller.create);
 userRouter.get("/api/category", categoryCotroller.get);
+
+// item
+userRouter.post("/api/item", itemController.create);

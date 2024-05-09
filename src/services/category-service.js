@@ -3,6 +3,7 @@ import { ResponseError } from "../error/response-error.js";
 import { createCategory } from "../validation/category-validation.js";
 import { validate } from "../validation/validation.js";
 import { nanoid } from "nanoid";
+// import { v4 as uuid } from "uuid";
 
 const create = (request) => {
   const category = validate(createCategory, request);
@@ -24,6 +25,11 @@ const get = async () => {
       name_category: true,
     },
   });
+
+  if (!category) {
+    throw new ResponseError(404, "category is not found");
+  }
+
   return category;
 };
 

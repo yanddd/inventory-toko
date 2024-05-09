@@ -117,6 +117,8 @@ const update = async (username, request) => {
     reqUser.password = await bcrypt.hash(reqUser.password, 10);
   }
 
+  reqUser.updated_at = new Date().toISOString();
+
   return prismaClient.user.update({
     where: {
       username: user.username,
