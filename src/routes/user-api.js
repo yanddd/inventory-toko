@@ -18,3 +18,5 @@ userRouter.get("/api/category", categoryCotroller.get);
 
 // item
 userRouter.post("/api/item", itemController.create);
+userRouter.get("/api/item", itemController.getAll);
+userRouter.put("/api/item/:itemId", itemController.update);
