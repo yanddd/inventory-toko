@@ -21,4 +21,6 @@ const updateItem = joi.object({
   category_id: joi.string().max(100).required(),
 });
 
-export { createItem, updateItem };
+const idItem = joi.string().max(100).required();
+
+export { createItem, updateItem, idItem };

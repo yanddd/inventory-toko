@@ -15,8 +15,12 @@ userRouter.delete("/api/users/logout", userController.logout);
 // category
 userRouter.post("/api/category", categoryCotroller.create);
 userRouter.get("/api/category", categoryCotroller.get);
+userRouter.put("/api/category/:idCategory", categoryCotroller.update);
+userRouter.delete("/api/category/:idCategory", categoryCotroller.remove);
 
 // item
 userRouter.post("/api/item", itemController.create);
 userRouter.get("/api/item", itemController.getAll);
 userRouter.put("/api/item/:itemId", itemController.update);
+userRouter.get("/api/item/:itemId", itemController.detail);
+userRouter.delete("/api/item/:itemId", itemController.remove);

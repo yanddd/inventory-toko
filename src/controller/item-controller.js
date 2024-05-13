@@ -34,4 +34,26 @@ const update = async (req, res, next) => {
   }
 };
 
-export default { create, getAll, update };
+const detail = async (req, res, next) => {
+  try {
+    const result = await itemService.detail(req.params.itemId);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    next();
+  }
+};
+
+const remove = async (req, res, next) => {
+  try {
+    const result = await itemService.remove(req.params.itemId);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { create, getAll, update, detail, remove };

@@ -1,6 +1,10 @@
 import { prismaClient } from "../app/database.js";
 import { ResponseError } from "../error/response-error.js";
-import { createItem, updateItem } from "../validation/item-validation.js";
+import {
+  createItem,
+  idItem,
+  updateItem,
+} from "../validation/item-validation.js";
 import { validate } from "../validation/validation.js";
 import { nanoid } from "nanoid";
 import { codeService, codePackService } from "../services/code-service.js";
@@ -60,9 +64,13 @@ const update = async (user, request) => {
 
   !item.modal ? !item.code_modal : (item.code_modal = codeService(item.modal));
 
-  !item.modal_pack
-    ? !item.code_modal_pack
-    : (item.code_modal_pack = codePackService(item.modal_pack));
+  if (!item.modal_pack) {
+    !item.code_modal_pack;
+  } else {
+    item.modal_pack.toString().length >= 7
+      ? (item.code_modal_pack = codePackService(item.modal_pack))
+      : (item.code_modal_pack = codeService(item.modal_pack));
+  }
 
   item.updated_at = new Date().toISOString();
 
@@ -81,4 +89,47 @@ const update = async (user, request) => {
   });
 };
 
-export default { create, getAll, update };
+const detail = async (request) => {
+  const cekId = validate(idItem, request);
+
+  const countId = await prismaClient.item.count({
+    where: {
+      id: cekId,
+    },
+  });
+
+  if (!countId) {
+    throw new ResponseError(404, "item is not found");
+  }
+
+  return prismaClient.item.findUnique({
+    where: {
+      id: cekId,
+    },
+  });
+};
+
+const remove = async (request) => {
+  const cekId = validate(idItem, request);
+
+  const countId = await prismaClient.item.count({
+    where: {
+      id: cekId,
+    },
+  });
+
+  if (!countId) {
+    throw new ResponseError(404, "item is not found");
+  }
+
+  return prismaClient.item.delete({
+    where: {
+      id: cekId,
+    },
+    select: {
+      id: true,
+    },
+  });
+};
+
+export default { create, getAll, update, detail, remove };
