@@ -3,6 +3,7 @@ import userController from "../controller/user-controller.js";
 import categoryCotroller from "../controller/category-controller.js";
 import { authMiddleware } from "../middleware/auth-middleware.js";
 import itemController from "../controller/item-controller.js";
+import hutangController from "../controller/hutang-controller.js";
 
 export const userRouter = new express.Router();
 userRouter.use(authMiddleware);
@@ -24,3 +25,10 @@ userRouter.get("/api/item", itemController.getAll);
 userRouter.put("/api/item/:itemId", itemController.update);
 userRouter.get("/api/item/:itemId", itemController.detail);
 userRouter.delete("/api/item/:itemId", itemController.remove);
+
+// hutang
+userRouter.post("/api/hutang", hutangController.create);
+userRouter.post("/api/hutang/:idHutang", hutangController.createWithId);
+userRouter.get("/api/hutang", hutangController.getAll);
+userRouter.get("/api/hutang/:idHutang", hutangController.detail);
+userRouter.post("/api/hutang/update/:id", hutangController.update);
