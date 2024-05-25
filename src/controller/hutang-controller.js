@@ -60,4 +60,15 @@ const update = async (req, res, next) => {
   }
 };
 
-export default { create, createWithId, getAll, detail, update };
+const remove = async (req, res, next) => {
+  try {
+    const result = await hutangService.remove(req.params.id);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { create, createWithId, getAll, detail, update, remove };

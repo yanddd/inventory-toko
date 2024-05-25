@@ -12,6 +12,8 @@ const createHutangWithId = joi.object({
   note: joi.string().required(),
 });
 
+const idKey = joi.number().positive().required();
+
 const idHutang = joi.string().required();
 
 const updateHutang = joi.object({
@@ -20,4 +22,16 @@ const updateHutang = joi.object({
   note: joi.string().required(),
 });
 
-export { createHutang, createHutangWithId, idHutang, updateHutang };
+const statusHutang = joi.object({
+  id: joi.number().positive().required(),
+  status: joi.string().valid("BelumLunas", "Lunas"),
+});
+
+export {
+  createHutang,
+  createHutangWithId,
+  idKey,
+  idHutang,
+  updateHutang,
+  statusHutang,
+};

@@ -31,4 +31,5 @@ userRouter.post("/api/hutang", hutangController.create);
 userRouter.post("/api/hutang/:idHutang", hutangController.createWithId);
 userRouter.get("/api/hutang", hutangController.getAll);
 userRouter.get("/api/hutang/:idHutang", hutangController.detail);
-userRouter.post("/api/hutang/update/:id", hutangController.update);
+userRouter.put("/api/hutang/:id", hutangController.update);
+userRouter.delete("/api/hutang/:id", hutangController.remove);

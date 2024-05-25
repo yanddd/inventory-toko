@@ -4,6 +4,8 @@ import {
   createHutang,
   createHutangWithId,
   idHutang,
+  idKey,
+  statusHutang,
   updateHutang,
 } from "../validation/hutang-validation.js";
 import { validate } from "../validation/validation.js";
@@ -87,7 +89,20 @@ const detail = async (request) => {
 };
 
 const update = async (user, request) => {
-  const hutang = validate(updateHutang, request);
+  let hutang;
+
+  if (request.status) {
+    hutang = validate(statusHutang, request);
+
+    if (hutang.status === "Lunas") {
+      hutang.hutang = 0;
+    }
+  } else {
+    hutang = validate(updateHutang, request);
+
+    hutang.username = user;
+    hutang.updated_at = new Date().toISOString();
+  }
 
   const findHutang = await prismaClient.hutang.findUnique({
     where: {
@@ -99,10 +114,7 @@ const update = async (user, request) => {
     throw new ResponseError(404, "hutang is not found");
   }
 
-  hutang.username = user;
-  hutang.updated_at = new Date().toISOString();
-
-  const updateDataHutang = prismaClient.hutang.update({
+  const updateDataHutang = await prismaClient.hutang.update({
     where: {
       id: hutang.id,
     },
@@ -114,8 +126,33 @@ const update = async (user, request) => {
       status: true,
     },
   });
-
   return updateDataHutang;
 };
 
-export default { create, createWithId, getAll, detail, update };
+const remove = async (request) => {
+  const hutang = validate(idKey, request);
+
+  const findHutang = await prismaClient.hutang.findUnique({
+    where: {
+      id: hutang,
+    },
+  });
+
+  if (!findHutang) {
+    throw new ResponseError(404, "hutang is not found");
+  }
+
+  const removeHutang = await prismaClient.hutang.delete({
+    where: {
+      id: hutang,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  return removeHutang;
+};
+
+export default { create, createWithId, getAll, detail, update, remove };
